@@ -2,7 +2,10 @@
   "name": "@wmissary/boilerplates",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "bin/index.js",
+  "bin": {
+    "boilerplate": "bin/index.js"
+  },
   "type": "module",
   "scripts": {
     "test": "node --test",
@@ -16,5 +19,8 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-sonarjs": "^0.16.0",
     "eslint-plugin-unicorn": "^44.0.2"
+  },
+  "dependencies": {
+    "sade": "^1.8.1"
   }
 }
