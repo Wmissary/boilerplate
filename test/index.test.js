@@ -51,7 +51,7 @@ test("Should prompts for the template if none supplied", () => {
     shell: true,
   });
 
-  assert.strictEqual(stdout.trim(), "Template:");
+  assert.strictEqual(stdout.trim().includes("Template:"), true);
 });
 
 test("Should prompts for the template if only --template is supplied", () => {
@@ -64,7 +64,7 @@ test("Should prompts for the template if only --template is supplied", () => {
     }
   );
 
-  assert.strictEqual(stdout.trim(), "Select a template:");
+  assert.strictEqual(stdout.trim().includes("Template:"), true);
 });
 
 test("Should prompts for the template if --template is invalid", () => {
@@ -76,6 +76,8 @@ test("Should prompts for the template if --template is invalid", () => {
       shell: true,
     }
   );
-
-  assert.strictEqual(stdout.trim(), '"unknown" is invalid, select a template:');
+  assert.strictEqual(
+    stdout.trim().includes(`"${INVALID_TEMPLATE}" is invalid. Template:`),
+    true
+  );
 });

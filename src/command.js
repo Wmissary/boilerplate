@@ -28,6 +28,22 @@ export const init = async (projectName, templateName) => {
         return isValidProjectName(value) || `${value} is invalid`;
       },
     },
+    {
+      type: templateName ? undefined : "select",
+      name: "templateName",
+      message: "Template:",
+      choices: ["CLI", "Vanilla"],
+    },
+    {
+      type: () => {
+        if (templateName && !["CLI", "Vanilla"].includes(templateName)) {
+          return "select";
+        }
+      },
+      name: "templateName",
+      message: `"${templateName}" is invalid. Template:`,
+      choices: ["CLI", "Vanilla"],
+    },
   ];
 
   const answer = await prompts(questions);

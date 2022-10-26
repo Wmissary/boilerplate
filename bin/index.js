@@ -13,6 +13,9 @@ prog
     if (typeof options["project-name"] === "boolean") {
       options["project-name"] = undefined;
     }
+    if (typeof options.template === "boolean") {
+      options.template = undefined;
+    }
     init(options["project-name"], options.template);
   });
 
