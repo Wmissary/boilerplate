@@ -17,7 +17,7 @@ test("Should prompts for the project name if none supplied", () => {
     shell: true,
   });
 
-  assert.strictEqual(stdout.trim(), "Project name:");
+  assert.strictEqual(stdout.trim().includes("Project name:"), true);
 });
 
 test("Should prompts for the project name if only --project-name is supplied", () => {
@@ -25,8 +25,7 @@ test("Should prompts for the project name if only --project-name is supplied", (
     encoding: "utf8",
     shell: true,
   });
-
-  assert.strictEqual(stdout.trim(), "Project name:");
+  assert.strictEqual(stdout.trim().includes("Project name:"), true);
 });
 
 test("Should prompts for the template if --project-name is invalid", () => {
@@ -38,8 +37,12 @@ test("Should prompts for the template if --project-name is invalid", () => {
       shell: true,
     }
   );
-
-  assert.strictEqual(stdout.trim(), '"unknown" is invalid, select a template:');
+  assert.strictEqual(
+    stdout
+      .trim()
+      .includes(`"${INVALID_PROJECT_NAME}" is invalid. Project name:`),
+    true
+  );
 });
 
 test("Should prompts for the template if none supplied", () => {

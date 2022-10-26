@@ -21,6 +21,7 @@
     "eslint-plugin-unicorn": "^44.0.2"
   },
   "dependencies": {
+    "prompts": "^2.4.2",
     "sade": "^1.8.1"
   }
 }

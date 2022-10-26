@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import sade from "sade";
+import { init } from "../src/command.js";
 
 const prog = sade("boilerplate");
 
@@ -9,7 +10,10 @@ prog
   .command("init")
   .option("--project-name, -n", "Change the name of the project")
   .action((options) => {
-    console.log(options);
+    if (typeof options["project-name"] === "boolean") {
+      options["project-name"] = undefined;
+    }
+    init(options["project-name"], options.template);
   });
 
 prog.parse(process.argv);
