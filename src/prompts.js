@@ -2,7 +2,18 @@ import prompts from "prompts";
 
 import { isValidProjectName } from "./utils.js";
 
-const AVAILABLE_TEMPLATES = ["node", "node cli"];
+const AVAILABLE_TEMPLATES = [
+  {
+    title: "Node vanilla",
+    description: "A vanilla Node.js project",
+    value: "node-vanilla",
+  },
+  {
+    title: "Node CLI",
+    description: "A Node.js CLI project",
+    value: "node-cli",
+  },
+];
 
 export const promptsQuestions = async (projectName, templateName) => {
   const questions = [
@@ -34,7 +45,6 @@ export const promptsQuestions = async (projectName, templateName) => {
     },
     {
       type: () => {
-        console.log(templateName);
         if (templateName && !AVAILABLE_TEMPLATES.includes(templateName)) {
           return "select";
         }

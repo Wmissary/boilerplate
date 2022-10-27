@@ -1,8 +1,32 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import fs from "node:fs";
+
 import { promptsQuestions } from "./prompts.js";
+import { copy } from "./utils.js";
 
-export const init = async (projectName, templateName) => {
-  const { name = projectName, template = templateName } =
-    await promptsQuestions(projectName, templateName);
+const TEMPLATES_PATH = path.join(
+  fileURLToPath(import.meta.url),
+  "..",
+  "..",
+  "templates"
+);
 
-  console.log(name, template);
-};
+export async function init(projectName, templateName) {
+  try {
+    const { name = projectName, template = templateName } =
+      await promptsQuestions(projectName, templateName);
+
+    const TEMPLATE_PATH = path.join(TEMPLATES_PATH, template);
+    copy(TEMPLATE_PATH, process.cwd());
+
+    const PACKAGE_PATH = path.join(process.cwd(), "package.json");
+    const packageJSON = JSON.parse(fs.readFileSync(PACKAGE_PATH, "utf8"));
+
+    packageJSON.name = name;
+
+    fs.writeFileSync(PACKAGE_PATH, JSON.stringify(packageJSON, undefined, 2));
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
