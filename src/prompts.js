@@ -1,6 +1,6 @@
 import prompts from "prompts";
 
-import { isValidProjectName } from "./utils.js";
+import { isValidProjectName, directoryIsEmpty } from "./utils.js";
 
 const AVAILABLE_TEMPLATES = [
   {
@@ -57,6 +57,11 @@ export const promptsQuestions = async (projectName, templateName) => {
       name: "template",
       message: `"${templateName}" is invalid. Template:`,
       choices: AVAILABLE_TEMPLATES,
+    },
+    {
+      type: directoryIsEmpty(process.cwd()) ? undefined : "confirm",
+      name: "confirm",
+      message: "Current directory is not empty. Continue?",
     },
   ];
 

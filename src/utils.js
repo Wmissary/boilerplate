@@ -25,4 +25,8 @@ function copyDirectory(sourceDirectory, destinationDirectory) {
   }
 }
 
-export { copy, isValidProjectName };
+function directoryIsEmpty(path) {
+  return fs.readdirSync(path).length === 0;
+}
+
+export { copy, isValidProjectName, directoryIsEmpty };

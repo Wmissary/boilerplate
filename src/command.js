@@ -15,8 +15,11 @@ const TEMPLATES_PATH = path.join(
 
 export async function init(projectName, templateName) {
   try {
-    const { name = projectName, template = templateName } =
-      await promptsQuestions(projectName, templateName);
+    const {
+      name = projectName,
+      template = templateName,
+      confirm,
+    } = await promptsQuestions(projectName, templateName);
 
     if (!name) {
       throw new Error("Project name is required");
@@ -24,6 +27,10 @@ export async function init(projectName, templateName) {
 
     if (!template) {
       throw new Error("Template is required");
+    }
+
+    if (!confirm) {
+      return;
     }
 
     const TEMPLATE_PATH = path.join(TEMPLATES_PATH, template);
