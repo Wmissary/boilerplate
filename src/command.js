@@ -18,6 +18,14 @@ export async function init(projectName, templateName) {
     const { name = projectName, template = templateName } =
       await promptsQuestions(projectName, templateName);
 
+    if (!name) {
+      throw new Error("Project name is required");
+    }
+
+    if (!template) {
+      throw new Error("Template is required");
+    }
+
     const TEMPLATE_PATH = path.join(TEMPLATES_PATH, template);
     copy(TEMPLATE_PATH, process.cwd());
 
