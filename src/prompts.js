@@ -45,7 +45,12 @@ export const promptsQuestions = async (projectName, templateName) => {
     },
     {
       type: () => {
-        if (templateName && !AVAILABLE_TEMPLATES.includes(templateName)) {
+        if (
+          templateName &&
+          !AVAILABLE_TEMPLATES.some(
+            (template) => template.value === templateName
+          )
+        ) {
           return "select";
         }
       },
