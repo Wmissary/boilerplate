@@ -1,6 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import fs from "node:fs";
+import { spawnSync } from "node:child_process";
 
 import { promptsQuestions } from "./prompts.js";
 import { copy } from "./utils.js";
@@ -26,6 +27,11 @@ export async function init(projectName, templateName) {
     packageJSON.name = name;
 
     fs.writeFileSync(PACKAGE_PATH, JSON.stringify(packageJSON, undefined, 2));
+
+    spawnSync("git", ["init"], {
+      cwd: process.cwd(),
+      stdio: "inherit",
+    });
   } catch (error) {
     console.error("Error:", error);
   }
