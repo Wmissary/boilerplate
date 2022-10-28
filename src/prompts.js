@@ -63,6 +63,11 @@ export const promptsQuestions = async (projectName, templateName) => {
       name: "confirm",
       message: "Current directory is not empty. Continue?",
     },
+    {
+      type: (previous) => (previous ? "confirm" : undefined),
+      name: "confirmCleanDirectory",
+      message: "Current directory is not empty. Empty it?",
+    },
   ];
 
   return await prompts(questions);
