@@ -25,13 +25,25 @@ Then follow the prompts!
 
 ## Commands
 
->Project name is optional, if not provided, you will be asked about it.
->Template name is also optional, if not provided, you will be asked about it.
+### Init
+
+> If you don't specify a project name, it will prompts you to choose one.
+> If you don't specify a template, it will prompts you to choose one.
+
+Usage:
 
 ```bash
-boilerplate init [project-name] [template-name]
+boilerplate init [--options] 
 ```
+
+Options:
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-n, --project-name
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -t, --template
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -h, --help
 
 ## Templates
 
-coming soon
+node-vanilla
