@@ -20,25 +20,18 @@ export async function init(projectName, templateName) {
       template = templateName,
       confirm,
       confirmCleanDirectory,
+      cancelled,
     } = await promptsQuestions(projectName, templateName);
 
-    if (name === undefined) {
-      throw new Error("Project name is required");
-    }
-
-    if (!template === undefined) {
-      throw new Error("Template is required");
+    if (cancelled === true) {
+      return;
     }
 
     if (confirm === false) {
       return;
     }
 
-    if (confirmCleanDirectory === undefined) {
-      return;
-    }
-
-    if (confirmCleanDirectory) {
+    if (confirmCleanDirectory === true) {
       for (const file of fs.readdirSync(process.cwd())) {
         fs.rmSync(file, { recursive: true });
       }
