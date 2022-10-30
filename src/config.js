@@ -5,10 +5,11 @@ export const AVAILABLE_TEMPLATES = new Set([
     description: "A Node.js project",
     templateLinter: new Set([
       "eslint",
-      "eslint-plugin-node",
-      "eslint-plugin-security",
+      "eslint-plugin-n",
       "eslint-plugin-sonarjs",
       "eslint-plugin-unicorn",
+      "eslint-plugin-import",
+      "eslint-plugin-promise",
     ]),
   },
 ]);

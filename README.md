@@ -5,15 +5,15 @@
 > **Compatibility Note:**
 > Requires [Node.js](https://nodejs.org/) 18.9.1 or newer.
 
-## Installation
+## **Installation**
 
 Clone the repo and run :
 
 ```bash
-npm install
+npm link
 ```
 
-## Start Your Project
+## **Start Your Project**
 
 Get into the project folder and run:
 
@@ -23,27 +23,33 @@ boilerplate init
 
 Then follow the prompts!
 
-## Commands
-
-### Init
-
-> If you don't specify a project name, it will prompts you to choose one.
-> If you don't specify a template, it will prompts you to choose one.
-
-Usage:
+## **Usage**
 
 ```bash
 boilerplate init [--options] 
 ```
 
-Options:
+> If you don't specify any options, the CLI will prompt you for the required information.
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-n, --project-name
+| Options | Alias | Description | Example |
+| ----------- | ----------- | ----------- | ----------- |
+| --name | -n | Specify the project name | `boilerplate init --name my-project` |
+| --template | -t | Specify the template name | `boilerplate init --template node-vanilla` |
+| --linter | -l | Add linter to the project | `boilerplate init --linter` |
+| --help | -h | Show help | `boilerplate init --help` |
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -t, --template
+## **Templates**
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -h, --help
+### **node-vanilla**
 
-## Templates
+---
+A vanilla Node.js project.
 
-node-vanilla
+Linter & plugins:  
+
+- [eslint](https://eslint.org/)
+- [eslint-plugin-n](https://www.npmjs.com/package/eslint-plugin-neslint-plugin-n)
+- [eslint-plugin-sonarjs](https://www.npmjs.com/package/eslint-plugin-sonarjs/)
+- [eslint-plugin-unicorn](https://www.npmjs.com/package/eslint-plugin-unicorn/)
+- [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import/)
+- [eslint-plugin-promise](https://www.npmjs.com/package/eslint-plugin-promise/)
