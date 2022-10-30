@@ -28,7 +28,7 @@ test("Should prompts for the project name if only --project-name is supplied", (
   assert.strictEqual(stdout.trim().includes("Project name:"), true);
 });
 
-test("Should prompts for the template if --project-name is invalid", () => {
+test("Should prompts for the project name if --project-name is invalid", () => {
   const { stdout } = spawnSync(
     CMD,
     [ARG, PROJECT_NAME_ARG, INVALID_PROJECT_NAME],

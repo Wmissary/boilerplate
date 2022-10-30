@@ -12,6 +12,7 @@ prog
   .command("init")
   .option("--project-name, -n", "Select project name")
   .option("--template, -t", "Select template")
+  .option("--linter, -l", "Install template linter")
   .action((options) => {
     if (typeof options[PROJECT_NAME_OPTION] === "boolean") {
       options[PROJECT_NAME_OPTION] = undefined;
@@ -20,7 +21,7 @@ prog
       options.template = undefined;
     }
 
-    init(options[PROJECT_NAME_OPTION], options.template);
+    init(options[PROJECT_NAME_OPTION], options.template, options.linter);
   });
 
 prog.parse(process.argv);

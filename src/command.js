@@ -5,6 +5,7 @@ import { spawnSync } from "node:child_process";
 
 import { promptsQuestions } from "./prompts.js";
 import { copy } from "./utils.js";
+import { AVAILABLE_TEMPLATES } from "./config.js";
 
 const TEMPLATES_PATH = path.join(
   fileURLToPath(import.meta.url),
@@ -13,7 +14,7 @@ const TEMPLATES_PATH = path.join(
   "templates"
 );
 
-export async function init(projectName, templateName) {
+export async function init(projectName, templateName, templateLinter) {
   try {
     const {
       name = projectName,
@@ -21,7 +22,8 @@ export async function init(projectName, templateName) {
       confirm,
       confirmCleanDirectory,
       cancelled,
-    } = await promptsQuestions(projectName, templateName);
+      linter = templateLinter,
+    } = await promptsQuestions(projectName, templateName, templateLinter);
 
     if (cancelled === true) {
       return;
@@ -51,6 +53,18 @@ export async function init(projectName, templateName) {
       cwd: process.cwd(),
       stdio: "inherit",
     });
+
+    if (linter === true) {
+      const linter = [...AVAILABLE_TEMPLATES].find(
+        (t) => t.templateDirectoryName === template
+      );
+
+      spawnSync("npm", ["install", "--save-dev", ...linter.templateLinter], {
+        cwd: process.cwd(),
+        stdio: "inherit",
+        shell: true,
+      });
+    }
   } catch (error) {
     console.error("Error:", error);
   }

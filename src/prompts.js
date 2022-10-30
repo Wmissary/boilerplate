@@ -18,8 +18,19 @@ const onCancel = (prompt, answers) => {
   return false;
 };
 
-export const promptsQuestions = async (projectName, templateName) => {
+export const promptsQuestions = async (projectName, templateName, linter) => {
   const questions = [
+    ...projectNameQuestions(projectName),
+    ...templateSelectionQuestions(templateName),
+    ...templateLinterQuestion(linter),
+    ...directoryIsNotEmptyQuestion(),
+  ];
+
+  return await prompts(questions, { onCancel });
+};
+
+const projectNameQuestions = (projectName) => {
+  return [
     {
       type: projectName ? undefined : "text",
       name: "name",
@@ -33,6 +44,11 @@ export const promptsQuestions = async (projectName, templateName) => {
       message: `"${projectName}" is invalid. Project name:`,
       validate: (value) => isValidProjectName(value) || `${value} is invalid`,
     },
+  ];
+};
+
+const templateSelectionQuestions = (templateName) => {
+  return [
     {
       type: templateName ? undefined : "select",
       name: "template",
@@ -49,20 +65,31 @@ export const promptsQuestions = async (projectName, templateName) => {
       message: `"${templateName}" is invalid. Template:`,
       choices: [...templates],
     },
+  ];
+};
+
+const templateLinterQuestion = (templateLinter) => {
+  return [
+    {
+      type: templateLinter ? undefined : "confirm",
+      name: "linter",
+      message: (previous, values) => `Add linter to ${values.template}?`,
+    },
+  ];
+};
+
+const directoryIsNotEmptyQuestion = () => {
+  return [
     {
       type: directoryIsEmpty(process.cwd()) ? undefined : "confirm",
       name: "confirm",
       message: "Current directory is not empty. Continue?",
     },
     {
-      type: (previous) =>
-        previous === true && directoryIsEmpty(process.cwd()) === false
-          ? "confirm"
-          : undefined,
+      type: (previous, values) =>
+        values.confirm === true ? "confirm" : undefined,
       name: "confirmCleanDirectory",
       message: "Current directory is not empty. Empty it?",
     },
   ];
-
-  return await prompts(questions, { onCancel });
 };
