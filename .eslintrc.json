@@ -8,12 +8,15 @@
     "plugin:unicorn/recommended",
     "plugin:import/recommended",
     "plugin:sonarjs/recommended",
-    "plugin:promise/recommended"
+    "plugin:promise/recommended",
+    "plugin:n/recommended"
   ],
-  "plugins": ["unicorn", "import", "sonarjs", "promise"],
+  "plugins": ["unicorn", "import", "sonarjs", "promise", "security", "n"],
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "rules": {}
+  "rules": {
+    "n/shebang": "off"
+  }
 }
