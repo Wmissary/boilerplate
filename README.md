@@ -42,7 +42,6 @@ boilerplate init [--options]
 
 ### **node-vanilla**
 
----
 A vanilla Node.js project.
 
 Linter & plugins:  
