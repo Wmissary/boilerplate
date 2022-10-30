@@ -7,21 +7,24 @@ function isValidProjectName(projectName) {
   );
 }
 
-function copy(source, destination) {
+function copy(source, destination, linter) {
   const stat = fs.statSync(source);
   if (stat.isDirectory()) {
-    copyDirectory(source, destination);
+    copyDirectory(source, destination, linter);
   } else {
+    if (path.basename(source) === ".eslintrc.json" && linter === false) {
+      return;
+    }
     fs.copyFileSync(source, destination);
   }
 }
 
-function copyDirectory(sourceDirectory, destinationDirectory) {
+function copyDirectory(sourceDirectory, destinationDirectory, linter) {
   fs.mkdirSync(destinationDirectory, { recursive: true });
   for (const file of fs.readdirSync(sourceDirectory)) {
     const sourceFile = path.join(sourceDirectory, file);
     const destinationFile = path.join(destinationDirectory, file);
-    copy(sourceFile, destinationFile);
+    copy(sourceFile, destinationFile, linter);
   }
 }
 

@@ -40,24 +40,20 @@ export async function init(projectName, templateName, templateLinter) {
     }
 
     const TEMPLATE_PATH = path.join(TEMPLATES_PATH, template);
-    copy(TEMPLATE_PATH, process.cwd());
+    copy(TEMPLATE_PATH, process.cwd(), linter);
 
     const PACKAGE_PATH = path.join(process.cwd(), "package.json");
     const packageJSON = JSON.parse(fs.readFileSync(PACKAGE_PATH, "utf8"));
 
     packageJSON.name = name;
 
-    fs.writeFileSync(PACKAGE_PATH, JSON.stringify(packageJSON, undefined, 2));
-
-    spawnSync("git", ["init"], {
-      cwd: process.cwd(),
-      stdio: "inherit",
-    });
-
     if (linter === true) {
       const linter = [...AVAILABLE_TEMPLATES].find(
         (t) => t.templateDirectoryName === template
       );
+      packageJSON.engines = {
+        node: `>=${process.versions.node}`,
+      };
 
       spawnSync("npm", ["install", "--save-dev", ...linter.templateLinter], {
         cwd: process.cwd(),
@@ -65,6 +61,13 @@ export async function init(projectName, templateName, templateLinter) {
         shell: true,
       });
     }
+
+    fs.writeFileSync(PACKAGE_PATH, JSON.stringify(packageJSON, undefined, 2));
+
+    spawnSync("git", ["init"], {
+      cwd: process.cwd(),
+      stdio: "inherit",
+    });
   } catch (error) {
     console.error("Error:", error);
   }
