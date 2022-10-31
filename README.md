@@ -15,7 +15,7 @@ npm link
 
 ## **Start Your Project**
 
-Get into the project folder and run:
+Run:
 
 ```bash
 boilerplate init
@@ -42,7 +42,20 @@ boilerplate init [--options]
 
 ### **node-vanilla**
 
-A vanilla Node.js project.
+A vanilla Node.js project template.
+
+Linter & plugins:  
+
+- [eslint](https://eslint.org/)
+- [eslint-plugin-n](https://www.npmjs.com/package/eslint-plugin-neslint-plugin-n)
+- [eslint-plugin-sonarjs](https://www.npmjs.com/package/eslint-plugin-sonarjs/)
+- [eslint-plugin-unicorn](https://www.npmjs.com/package/eslint-plugin-unicorn/)
+- [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import/)
+- [eslint-plugin-promise](https://www.npmjs.com/package/eslint-plugin-promise/)
+
+### **node-cli**
+
+A Node.js CLI project template.
 
 Linter & plugins:  
 
