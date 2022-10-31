@@ -1,0 +1,15 @@
+{
+  "name": "my-app",
+  "version": "0.0.1",
+  "description": "",
+  "main": "bin/index.js",
+  "bin": {
+    "app": "bin/index.js"
+  },
+  "type": "module",
+  "scripts": {
+    "test": ""
+  },
+  "author": "",
+  "license": "ISC"
+}

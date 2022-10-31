@@ -23,6 +23,7 @@ export async function init(projectName, templateName, templateLinter) {
       confirmCleanDirectory,
       cancelled,
       linter = templateLinter,
+      command,
     } = await promptsQuestions(projectName, templateName, templateLinter);
 
     if (cancelled === true) {
@@ -46,6 +47,11 @@ export async function init(projectName, templateName, templateLinter) {
     const packageJSON = JSON.parse(fs.readFileSync(PACKAGE_PATH, "utf8"));
 
     packageJSON.name = name;
+    if (template === "node-cli") {
+      packageJSON.bin = {
+        [command]: "bin/index.js",
+      };
+    }
 
     if (linter === true) {
       const linter = [...AVAILABLE_TEMPLATES].find(

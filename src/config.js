@@ -12,4 +12,17 @@ export const AVAILABLE_TEMPLATES = new Set([
       "eslint-plugin-promise",
     ]),
   },
+  {
+    name: "Node CLI",
+    templateDirectoryName: "node-cli",
+    description: "A Node.js CLI project",
+    templateLinter: new Set([
+      "eslint",
+      "eslint-plugin-n",
+      "eslint-plugin-sonarjs",
+      "eslint-plugin-unicorn",
+      "eslint-plugin-import",
+      "eslint-plugin-promise",
+    ]),
+  },
 ]);

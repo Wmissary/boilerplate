@@ -22,8 +22,9 @@ export const promptsQuestions = async (projectName, templateName, linter) => {
   const questions = [
     ...projectNameQuestions(projectName),
     ...templateSelectionQuestions(templateName),
-    ...templateLinterQuestion(linter),
-    ...directoryIsNotEmptyQuestion(),
+    ...cliQuestions(),
+    ...templateLinterQuestions(linter),
+    ...directoryIsNotEmptyQuestions(),
   ];
 
   return await prompts(questions, { onCancel });
@@ -68,7 +69,7 @@ const templateSelectionQuestions = (templateName) => {
   ];
 };
 
-const templateLinterQuestion = (templateLinter) => {
+const templateLinterQuestions = (templateLinter) => {
   return [
     {
       type: templateLinter ? undefined : "confirm",
@@ -78,7 +79,7 @@ const templateLinterQuestion = (templateLinter) => {
   ];
 };
 
-const directoryIsNotEmptyQuestion = () => {
+const directoryIsNotEmptyQuestions = () => {
   return [
     {
       type: directoryIsEmpty(process.cwd()) ? undefined : "confirm",
@@ -90,6 +91,18 @@ const directoryIsNotEmptyQuestion = () => {
         values.confirm === true ? "confirm" : undefined,
       name: "confirmCleanDirectory",
       message: "Current directory is not empty. Empty it?",
+    },
+  ];
+};
+
+const cliQuestions = () => {
+  // TODO: Validate command
+  return [
+    {
+      type: (previous, values) =>
+        values.template === "node-cli" ? "text" : undefined,
+      name: "command",
+      message: "CLI command:",
     },
   ];
 };
