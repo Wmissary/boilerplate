@@ -102,7 +102,7 @@ test("Should prompts for the linter if --linter is not supply", () => {
 test("Should prompts for the cli command", () => {
   const { stdout } = spawnSync(
     CMD,
-    [ARG, PROJECT_NAME_ARG, PROJECT_NAME, TEMPLATE_ARG, "node-cli"],
+    [ARG, PROJECT_NAME_ARG, PROJECT_NAME, TEMPLATE_ARG, "node-cli", "--linter"],
     {
       encoding: "utf8",
       shell: true,

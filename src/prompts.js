@@ -22,7 +22,7 @@ export const promptsQuestions = async (projectName, templateName, linter) => {
   const questions = [
     ...projectNameQuestions(projectName),
     ...templateSelectionQuestions(templateName),
-    ...cliQuestions(),
+    ...cliQuestions(templateName),
     ...templateLinterQuestions(linter, templateName),
     ...directoryIsNotEmptyQuestions(),
   ];
@@ -96,12 +96,12 @@ const directoryIsNotEmptyQuestions = () => {
   ];
 };
 
-const cliQuestions = () => {
+const cliQuestions = (templateName) => {
   // TODO: Validate command
   return [
     {
       type: (previous, values) =>
-        values.template === "node-cli" ? "text" : undefined,
+        values.template ?? templateName === "node-cli" ? "text" : undefined,
       name: "command",
       message: "CLI command:",
     },
