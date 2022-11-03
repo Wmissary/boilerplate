@@ -23,7 +23,7 @@ export const promptsQuestions = async (projectName, templateName, linter) => {
     ...projectNameQuestions(projectName),
     ...templateSelectionQuestions(templateName),
     ...cliQuestions(),
-    ...templateLinterQuestions(linter),
+    ...templateLinterQuestions(linter, templateName),
     ...directoryIsNotEmptyQuestions(),
   ];
 
@@ -69,12 +69,13 @@ const templateSelectionQuestions = (templateName) => {
   ];
 };
 
-const templateLinterQuestions = (templateLinter) => {
+const templateLinterQuestions = (templateLinter, templateName) => {
   return [
     {
       type: templateLinter ? undefined : "confirm",
       name: "linter",
-      message: (previous, values) => `Add linter to ${values.template}?`,
+      message: (previous, values) =>
+        `Add linter to ${values.template ?? templateName}?`,
     },
   ];
 };
