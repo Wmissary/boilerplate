@@ -72,7 +72,13 @@ const templateSelectionQuestions = (templateName) => {
 const templateLinterQuestions = (templateLinter, templateName) => {
   return [
     {
-      type: templateLinter ? undefined : "confirm",
+      type: () => {
+        if (templateLinter && templateName !== "html-vanilla") {
+          return "confirm";
+        } else {
+          return undefined;
+        }
+      },
       name: "linter",
       message: (previous, values) =>
         `Add linter to ${values.template ?? templateName}?`,
@@ -100,8 +106,13 @@ const cliQuestions = (templateName) => {
   // TODO: Validate command
   return [
     {
-      type: (previous, values) =>
-        values.template ?? templateName === "node-cli" ? "text" : undefined,
+      type: (previous, values) => {
+        if (values.template === "node-cli" || templateName === "node-cli") {
+          return "text";
+        } else {
+          return undefined;
+        }
+      },
       name: "command",
       message: "CLI command:",
     },

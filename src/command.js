@@ -36,6 +36,7 @@ export async function init(projectName, templateName, templateLinter) {
 
     if (confirmCleanDirectory === true) {
       for (const file of fs.readdirSync(process.cwd())) {
+        console.log(`Removing ${file}`);
         fs.rmSync(file, { recursive: true });
       }
     }
@@ -44,13 +45,16 @@ export async function init(projectName, templateName, templateLinter) {
     copy(TEMPLATE_PATH, process.cwd(), linter);
 
     const PACKAGE_PATH = path.join(process.cwd(), "package.json");
-    const packageJSON = JSON.parse(fs.readFileSync(PACKAGE_PATH, "utf8"));
-
-    packageJSON.name = name;
-    if (template === "node-cli") {
-      packageJSON.bin = {
-        [command]: "bin/index.js",
-      };
+    try {
+      const packageJSON = JSON.parse(fs.readFileSync(PACKAGE_PATH, "utf8"));
+      packageJSON.name = name;
+      if (template === "node-cli") {
+        packageJSON.bin = {
+          [command]: "bin/index.js",
+        };
+      }
+    } catch (error) {
+      return;
     }
 
     if (linter === true) {

@@ -25,4 +25,10 @@ export const AVAILABLE_TEMPLATES = new Set([
       "eslint-plugin-promise",
     ]),
   },
+  {
+    name: "HTML vanilla",
+    templateDirectoryName: "html-vanilla",
+    description: "A simple HTML project",
+    templateLinter: new Set(),
+  },
 ]);
