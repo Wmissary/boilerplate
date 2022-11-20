@@ -65,3 +65,9 @@ Linter & plugins:
 - [eslint-plugin-unicorn](https://www.npmjs.com/package/eslint-plugin-unicorn/)
 - [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import/)
 - [eslint-plugin-promise](https://www.npmjs.com/package/eslint-plugin-promise/)
+
+### **html-vanilla**
+
+A simple HTML project template.
+
+Linter & plugins: None
