@@ -74,9 +74,9 @@ const templateLinterQuestions = (templateLinter, templateName) => {
     {
       type: () => {
         if (templateLinter && templateName !== "html-vanilla") {
-          return "confirm";
-        } else {
           return undefined;
+        } else {
+          return "confirm";
         }
       },
       name: "linter",
