@@ -53,26 +53,25 @@ export async function init(projectName, templateName, templateLinter) {
           [command]: "bin/index.js",
         };
       }
+      if (linter === true) {
+        const linter = [...AVAILABLE_TEMPLATES].find(
+          (t) => t.templateDirectoryName === template
+        );
+        packageJSON.engines = {
+          node: `>=${process.versions.node}`,
+        };
+
+        spawnSync("npm", ["install", "--save-dev", ...linter.templateLinter], {
+          cwd: process.cwd(),
+          stdio: "inherit",
+          shell: true,
+        });
+      }
+
+      fs.writeFileSync(PACKAGE_PATH, JSON.stringify(packageJSON, undefined, 2));
     } catch (error) {
       return;
     }
-
-    if (linter === true) {
-      const linter = [...AVAILABLE_TEMPLATES].find(
-        (t) => t.templateDirectoryName === template
-      );
-      packageJSON.engines = {
-        node: `>=${process.versions.node}`,
-      };
-
-      spawnSync("npm", ["install", "--save-dev", ...linter.templateLinter], {
-        cwd: process.cwd(),
-        stdio: "inherit",
-        shell: true,
-      });
-    }
-
-    fs.writeFileSync(PACKAGE_PATH, JSON.stringify(packageJSON, undefined, 2));
 
     spawnSync("git", ["init"], {
       cwd: process.cwd(),
