@@ -61,14 +61,17 @@ export async function init(projectName, templateName, templateLinter) {
           node: `>=${process.versions.node}`,
         };
 
+        fs.writeFileSync(
+          PACKAGE_PATH,
+          JSON.stringify(packageJSON, undefined, 2)
+        );
+
         spawnSync("npm", ["install", "--save-dev", ...linter.templateLinter], {
           cwd: process.cwd(),
           stdio: "inherit",
           shell: true,
         });
       }
-
-      fs.writeFileSync(PACKAGE_PATH, JSON.stringify(packageJSON, undefined, 2));
     } catch (error) {
       return;
     }
