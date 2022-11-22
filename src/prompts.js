@@ -72,8 +72,11 @@ const templateSelectionQuestions = (templateName) => {
 const templateLinterQuestions = (templateLinter, templateName) => {
   return [
     {
-      type: () => {
-        if (templateLinter && templateName !== "html-vanilla") {
+      type: (previous, values) => {
+        if (
+          (templateLinter && templateName === "html-vanilla") ||
+          (!templateLinter && values.template === "html-vanilla")
+        ) {
           return undefined;
         } else {
           return "confirm";
