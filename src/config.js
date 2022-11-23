@@ -1,9 +1,10 @@
-export const AVAILABLE_TEMPLATES = new Set([
+export const kSetAvailableTemplates = new Set([
   {
     name: "Node Vanilla",
-    templateDirectoryName: "node-vanilla",
+    directoryName: "node-vanilla",
     description: "A Node.js project",
-    templateLinter: new Set([
+    node: true,
+    linterDependencies: new Set([
       "eslint",
       "eslint-plugin-n",
       "eslint-plugin-sonarjs",
@@ -14,9 +15,10 @@ export const AVAILABLE_TEMPLATES = new Set([
   },
   {
     name: "Node CLI",
-    templateDirectoryName: "node-cli",
+    directoryName: "node-cli",
     description: "A Node.js CLI project",
-    templateLinter: new Set([
+    node: true,
+    linterDependencies: new Set([
       "eslint",
       "eslint-plugin-n",
       "eslint-plugin-sonarjs",
@@ -24,11 +26,12 @@ export const AVAILABLE_TEMPLATES = new Set([
       "eslint-plugin-import",
       "eslint-plugin-promise",
     ]),
+    dependencies: new Set(["sade"]),
   },
   {
     name: "HTML vanilla",
-    templateDirectoryName: "html-vanilla",
+    directoryName: "html-vanilla",
     description: "A simple HTML project",
-    templateLinter: new Set(),
+    node: false,
   },
 ]);

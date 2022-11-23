@@ -1,123 +1,101 @@
 import prompts from "prompts";
-
-import { isValidProjectName, directoryIsEmpty } from "./utils.js";
-import { AVAILABLE_TEMPLATES } from "./config.js";
-
-const templates = new Set([]);
-
-for (const template of AVAILABLE_TEMPLATES) {
-  templates.add({
-    title: template.name,
-    description: template.description,
-    value: template.templateDirectoryName,
-  });
-}
+import { isDirectoryEmpty, isValidProjectName } from "./utils.js";
 
 const onCancel = (prompt, answers) => {
   answers.cancelled = true;
   return false;
 };
 
-export const promptsQuestions = async (projectName, templateName, linter) => {
+export async function promptsQuestions(cliOptions, templates) {
+  const { templateName, projectName, linter } = cliOptions;
   const questions = [
-    ...projectNameQuestions(projectName),
-    ...templateSelectionQuestions(templateName),
-    ...cliQuestions(templateName),
-    ...templateLinterQuestions(linter, templateName),
-    ...directoryIsNotEmptyQuestions(),
+    ...templateQuestions(templateName, templates),
+    ...projectNameQuestions(projectName, templateName, templates),
+    ...linterQuestions(linter, templateName, templates),
+    ...clearDirectoryQuestions(),
   ];
-
   return await prompts(questions, { onCancel });
-};
+}
 
-const projectNameQuestions = (projectName) => {
+function templateQuestions(templateName, templates) {
+  const choices = [...templates].map((template) => ({
+    title: template.name,
+    value: template.directoryName,
+    description: template.description,
+  }));
   return [
-    {
-      type: projectName ? undefined : "text",
-      name: "name",
-      message: "Project name:",
-      validate: (value) => isValidProjectName(value) || `${value} is invalid`,
-    },
-    {
-      type:
-        projectName && !isValidProjectName(projectName) ? "text" : undefined,
-      name: "name",
-      message: `"${projectName}" is invalid. Project name:`,
-      validate: (value) => isValidProjectName(value) || `${value} is invalid`,
-    },
-  ];
-};
-
-const templateSelectionQuestions = (templateName) => {
-  return [
-    {
-      type: templateName ? undefined : "select",
-      name: "template",
-      message: "Template:",
-      choices: [...templates],
-    },
     {
       type:
         templateName &&
-        ![...templates].some((template) => template.value === templateName)
-          ? "select"
-          : undefined,
-      name: "template",
-      message: `"${templateName}" is invalid. Template:`,
-      choices: [...templates],
+        [...templates].some(
+          (template) =>
+            template.directoryName.toLowerCase() === templateName.toLowerCase()
+        )
+          ? undefined
+          : "select",
+      name: "templateName",
+      message: "Template:",
+      choices,
     },
   ];
-};
+}
 
-const templateLinterQuestions = (templateLinter, templateName) => {
+function projectNameQuestions(projectName, templateName, templates) {
   return [
     {
-      type: (previous, values) => {
-        if (
-          (templateLinter && templateName === "html-vanilla") ||
-          (!templateLinter && values.template === "html-vanilla")
-        ) {
-          return undefined;
-        } else {
-          return "confirm";
-        }
+      type: (_previous, values) => {
+        const template = [...templates].find(
+          (template) =>
+            template.directoryName?.toLowerCase() ===
+            (templateName?.toLowerCase() ?? values.templateName?.toLowerCase())
+        );
+        return (projectName && isValidProjectName(projectName)) ||
+          template.node === false
+          ? undefined
+          : "text";
+      },
+      name: "projectName",
+      message: "Project name:",
+      validate: (value) => isValidProjectName(value) || `${value} is invalid`,
+    },
+  ];
+}
+
+function linterQuestions(linter, templateName, templates) {
+  return [
+    {
+      type: (_previous, values) => {
+        const template = [...templates].find(
+          (template) =>
+            template.directoryName?.toLowerCase() ===
+            (templateName?.toLowerCase() ?? values.templateName?.toLowerCase())
+        );
+        if (template.node === false || linter) return;
+        return template.node === true && template.linterDependencies.size > 0
+          ? "confirm"
+          : undefined;
       },
       name: "linter",
-      message: (previous, values) =>
-        `Add linter to ${values.template ?? templateName}?`,
+      message: "Linter:",
     },
   ];
-};
+}
 
-const directoryIsNotEmptyQuestions = () => {
+function clearDirectoryQuestions() {
   return [
     {
-      type: directoryIsEmpty(process.cwd()) ? undefined : "confirm",
-      name: "confirm",
-      message: "Current directory is not empty. Continue?",
+      type: isDirectoryEmpty(process.cwd()) ? undefined : "confirm",
+      name: "confirmContinue",
+      message: "Directory is not empty. Continue?",
     },
     {
-      type: (previous, values) =>
-        values.confirm === true ? "confirm" : undefined,
-      name: "confirmCleanDirectory",
-      message: "Current directory is not empty. Empty it?",
+      type: (_previous, values) =>
+        isDirectoryEmpty(process.cwd()) ||
+        (!isDirectoryEmpty(process.cwd()) && values.confirmContinue === false)
+          ? undefined
+          : "confirm",
+      name: "clearDirectory",
+      message: "Clear directory?",
     },
   ];
-};
-
-const cliQuestions = (templateName) => {
-  // TODO: Validate command
-  return [
-    {
-      type: (previous, values) => {
-        if (values.template === "node-cli" || templateName === "node-cli") {
-          return "text";
-        } else {
-          return undefined;
-        }
-      },
-      name: "command",
-      message: "CLI command:",
-    },
-  ];
-};
+}

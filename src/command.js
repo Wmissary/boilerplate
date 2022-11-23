@@ -4,83 +4,71 @@ import fs from "node:fs";
 import { spawnSync } from "node:child_process";
 
 import { promptsQuestions } from "./prompts.js";
+import { kSetAvailableTemplates } from "./config.js";
 import { copy } from "./utils.js";
-import { AVAILABLE_TEMPLATES } from "./config.js";
 
-const TEMPLATES_PATH = path.join(
-  fileURLToPath(import.meta.url),
-  "..",
-  "..",
-  "templates"
+const kPathToTemplates = fileURLToPath(
+  new URL(path.join("..", "templates"), import.meta.url)
 );
 
-export async function init(projectName, templateName, templateLinter) {
-  try {
-    const {
-      name = projectName,
-      template = templateName,
-      confirm,
-      confirmCleanDirectory,
-      cancelled,
-      linter = templateLinter,
-      command,
-    } = await promptsQuestions(projectName, templateName, templateLinter);
+export async function init(options) {
+  const {
+    templateName = options.templateName,
+    projectName = options.projectName,
+    linter = options.linter,
+    confirmContinue,
+    clearDirectory,
+    cancelled,
+  } = await promptsQuestions(options, kSetAvailableTemplates);
 
-    if (cancelled === true) {
-      return;
+  if (cancelled === true) return;
+  if (confirmContinue === false) return;
+
+  if (clearDirectory === true) {
+    for (const file of fs.readdirSync(process.cwd())) {
+      console.log(`Removing ${file}`);
+      fs.rmSync(file, { recursive: true });
     }
+  }
 
-    if (confirm === false) {
-      return;
-    }
+  const foundTemplate = [...kSetAvailableTemplates].find(
+    (t) => t.directoryName === templateName
+  );
 
-    if (confirmCleanDirectory === true) {
-      for (const file of fs.readdirSync(process.cwd())) {
-        console.log(`Removing ${file}`);
-        fs.rmSync(file, { recursive: true });
-      }
-    }
+  const kPathToFoundTemplate = path.join(
+    kPathToTemplates,
+    foundTemplate.directoryName
+  );
 
-    const TEMPLATE_PATH = path.join(TEMPLATES_PATH, template);
-    copy(TEMPLATE_PATH, process.cwd(), linter);
+  copy(kPathToFoundTemplate, process.cwd(), linter);
 
-    const PACKAGE_PATH = path.join(process.cwd(), "package.json");
-    try {
-      const packageJSON = JSON.parse(fs.readFileSync(PACKAGE_PATH, "utf8"));
-      packageJSON.name = name;
-      if (template === "node-cli") {
-        packageJSON.bin = {
-          [command]: "bin/index.js",
-        };
-      }
-      if (linter === true) {
-        const linter = [...AVAILABLE_TEMPLATES].find(
-          (t) => t.templateDirectoryName === template
-        );
-        packageJSON.engines = {
-          node: `>=${process.versions.node}`,
-        };
+  if (foundTemplate.node === true) {
+    const kPathToPackageJSON = path.join(process.cwd(), "package.json");
+    const packageJSON = JSON.parse(fs.readFileSync(kPathToPackageJSON, "utf8"));
+    packageJSON.name = projectName;
 
-        fs.writeFileSync(
-          PACKAGE_PATH,
-          JSON.stringify(packageJSON, undefined, 2)
-        );
+    if (linter === true)
+      packageJSON.engines = { node: `>=${process.versions.node}` };
 
-        spawnSync("npm", ["install", "--save-dev", ...linter.templateLinter], {
+    fs.writeFileSync(
+      kPathToPackageJSON,
+      JSON.stringify(packageJSON, undefined, 2)
+    );
+
+    if (linter && foundTemplate.linterDependencies !== undefined) {
+      spawnSync(
+        "npm",
+        ["install", "--save-dev", ...foundTemplate.linterDependencies],
+        {
           cwd: process.cwd(),
           stdio: "inherit",
           shell: true,
-        });
-      }
-    } catch (error) {
-      return;
+        }
+      );
     }
-
-    spawnSync("git", ["init"], {
-      cwd: process.cwd(),
-      stdio: "inherit",
-    });
-  } catch (error) {
-    console.error("Error:", error);
   }
+  spawnSync("git", ["init"], {
+    cwd: process.cwd(),
+    stdio: "inherit",
+  });
 }

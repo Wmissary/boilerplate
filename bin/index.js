@@ -21,7 +21,11 @@ prog
       options.template = undefined;
     }
 
-    init(options[PROJECT_NAME_OPTION], options.template, options.linter);
+    init({
+      templateName: options.template,
+      projectName: options[PROJECT_NAME_OPTION],
+      linter: options.linter,
+    });
   });
 
 prog.parse(process.argv);

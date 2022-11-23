@@ -28,8 +28,8 @@ function copyDirectory(sourceDirectory, destinationDirectory, linter) {
   }
 }
 
-function directoryIsEmpty(path) {
+function isDirectoryEmpty(path) {
   return fs.readdirSync(path).length === 0;
 }
 
-export { copy, isValidProjectName, directoryIsEmpty };
+export { copy, isValidProjectName, isDirectoryEmpty };
