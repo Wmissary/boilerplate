@@ -1,4 +1,4 @@
-export const kSetAvailableTemplates = new Set([
+const kSetAvailableTemplates = new Set([
   {
     name: "Node Vanilla",
     directoryName: "node-vanilla",
@@ -35,3 +35,11 @@ export const kSetAvailableTemplates = new Set([
     node: false,
   },
 ]);
+
+const kObjectSpawnSyncOptions = {
+  cwd: process.cwd(),
+  stdio: "inherit",
+  shell: true,
+};
+
+export { kSetAvailableTemplates, kObjectSpawnSyncOptions };

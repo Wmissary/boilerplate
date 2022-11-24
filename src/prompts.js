@@ -104,7 +104,8 @@ function clearDirectoryQuestions() {
 function cliQuestions() {
   return [
     {
-      type: "text",
+      type: (_previous, values) =>
+        values.templateName === "node-cli" ? "text" : undefined,
       name: "cliCommand",
       message: "Enter your command to run the CLI",
     },
