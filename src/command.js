@@ -19,6 +19,7 @@ export async function init(options) {
     confirmContinue,
     clearDirectory,
     cancelled,
+    cliCommand,
   } = await promptsQuestions(options, kSetAvailableTemplates);
 
   if (cancelled === true) return;
@@ -49,6 +50,10 @@ export async function init(options) {
 
     if (linter === true)
       packageJSON.engines = { node: `>=${process.versions.node}` };
+
+    if (cliCommand) {
+      packageJSON.bin = { [cliCommand]: "bin/index.js" };
+    }
 
     fs.writeFileSync(
       kPathToPackageJSON,

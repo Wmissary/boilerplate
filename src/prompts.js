@@ -13,6 +13,7 @@ export async function promptsQuestions(cliOptions, templates) {
     ...projectNameQuestions(projectName, templateName, templates),
     ...linterQuestions(linter, templateName, templates),
     ...clearDirectoryQuestions(),
+    ...cliQuestions(),
   ];
   return await prompts(questions, { onCancel });
 }
@@ -96,6 +97,16 @@ function clearDirectoryQuestions() {
           : "confirm",
       name: "clearDirectory",
       message: "Clear directory?",
+    },
+  ];
+}
+
+function cliQuestions() {
+  return [
+    {
+      type: "text",
+      name: "cliCommand",
+      message: "Enter your command to run the CLI",
     },
   ];
 }
